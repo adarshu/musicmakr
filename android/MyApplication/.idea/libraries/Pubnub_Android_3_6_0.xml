@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Pubnub-Android-3.6.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/Pubnub-Android-3.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../java/android/src" />
+      <root url="file://$PROJECT_DIR$/../../../java/java/src" />
+      <root url="file://$PROJECT_DIR$/../../../java/java/src1" />
+      <root url="file://$PROJECT_DIR$/../../../java/android/src" />
+    </SOURCES>
+  </library>
+</component>
