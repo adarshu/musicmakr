@@ -1,8 +1,8 @@
 <?php
 require('twilio-php/Services/Twilio.php');
 
-$sid = "AC19d4b688c588b4a5f631976d8ac62a64"; // Your Account SID from www.twilio.com/user/account
-$token = "6d42cd04bbbdc0dc2580b59ac99aff95"; // Your Auth Token from www.twilio.com/user/account
+$sid = "AC502a93adcdf4f27c65b7deb23027f094"; // Your Account SID from www.twilio.com/user/account
+$token = "4899636dd1ea3647709a78231da49b3d"; // Your Auth Token from www.twilio.com/user/account
 $client = new Services_Twilio($sid, $token);
 
 function startsWith($haystack, $needle)
@@ -32,7 +32,7 @@ if (startsWith(strtolower($body), "happy")) {
     $resp = "Incorrect";
 }
 
-file_put_contents("reply.txt", $resp . "\n");
+//file_put_contents("reply.txt", $resp . "\n");
 
 // now greet the sender
 header("content-type: text/xml");
