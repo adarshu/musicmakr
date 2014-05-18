@@ -1,17 +1,102 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MusicControlR</title>
-    <link rel="stylesheet/less" type="text/css" href="lib/metronomik-player/m-player.less" />
+    <title>Now Playing</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" type="text/css" href="lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="lib/rdio-utils/rdio-utils.css">
+    <link rel="stylesheet/less" type="text/css" href="style/main.less">
+
     <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
-    <script src="https://www.rdio.com/api/api.js?client_id=O0g2OkeDmUSyXwrMQdVylA"></script>
+    <script src="https://www.rdio.com/api/api.js?client_id=qu2nUg8KkGM4AiXxuePmgw"></script>
+
+    <script src="lib/jquery-1.9.1.min.js"></script>
+    <script src="lib/underscore-1.4.4.min.js"></script>
+    <script src="lib/spin.min.js"></script>
+    <script src="lib/less-1.3.0.min.js"></script>
+    <script src="lib/rdio-utils/rdio-utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/unauthenticated-view.js"></script>
+    <script src="js/pictures-view.js"></script>
+    <script src="js/collection-button.js"></script>
+
+    <script id="unauthenticated-template" type="text/template">
+      <p>This app displays pictures of the artist for the currently playing album.</p>
+      <p>To get started, youll have to <button id="authenticate">authorize</button>.</p>
+    </script>
+
+    <script id="pictures-template" type="text/template">
+      <div class="picture"></div>
+      <div class="picture"></div>
+      <div class="info">
+        <div class="artist"></div>
+        <div class="album"></div>
+        <div class="track"></div>
+      </div>
+      <div class="yes btn"></div>
+      <div class="no btn" title="Skip to next source"></div>
+    </script>
     <script src=http://cdn.pubnub.com/pubnub.min.js ></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
-    <script src="lib/metronomik-player/m-player.js"></script>
-    <script src="demo.js"></script>
     <script>(function(){
      
+         function parse_message(m){
+
+            if (m.cmd == 'pause') {
+
+              alert('pause:'+m.val);
+
+            }
+
+            if (m.cmd == 'play'){
+
+              alert('play:'+m.val);
+
+            }
+
+            if (m.cmd == 'next'){
+
+              alert('next:'+m.val);
+
+            }
+
+            if (m.cmd == 'prev'){
+
+              alert('prev:'+m.val);
+
+            }
+
+            if (m.cmd == 'seek'){
+
+              alert('seek:'+m.val);
+
+            }
+
+            if (m.cmd == 'search'){
+
+              R.request({
+                          method: "search",
+                          content: {
+                            query: m.val,
+                            types: "Track",
+                            start: 0,
+                            count: 1
+                          },
+                          success: function(response) {
+                            if(response.status == 'ok'){
+                                var top = response.result.results[0];
+                                alert(top.name + " by " + top.artist);
+                          }
+                          },
+                          error: function(response) {
+                            console.log("error: " + response.message);
+                          }
+              });
+
+            }
+
+         } 
+
          var pubnub = PUBNUB.init({
              publish_key   : 'pub-c-f1c6575f-d2d3-4cd1-bb38-2492c50b7d0e',
              subscribe_key : 'sub-c-e877ab56-de0c-11e3-8c07-02ee2ddab7fe'
@@ -19,175 +104,21 @@
      
          pubnub.subscribe({
              channel : "hello_world",
-             message : function(m){ alert(m) },
+             message : function(m){ parse_message(m) },
              connect : publish
          })
      
          function publish() {
              pubnub.publish({
                  channel : "hello_world",
-                 message : "Hi."
+                 message : "UI launched"
              })
          }
      })();
 
     </script>
-    <style>
-
-      .content {
-        margin: 20px;
-      }
-
-      .error {
-        color: #a00;
-        font-weight: bold;
-      }
-
-      .hidden-view {
-        display: none;
-        margin: 20px 0;
-      }
-
-    </style>
   </head>
   <body>
-    <div class="content">
-      <div id="error-message" class="error"></div>
-      <div id="protocol-error" class="hidden-view error">You must run this page from a server (even localhost) for the Rdio JS API to work. See <a href="https://github.com/rdio/jsapi-examples">https://github.com/rdio/jsapi-examples</a> for more info.</div>
-      <div class="authenticated-view hidden-view">
-        Authenticated as <span class="username"></span>.
-      </div>
-      <div class="unauthenticated-view hidden-view">
-        Unauthenticated.
-        <button class="sign-in">Sign In</button>
-      </div>
- <!--      <div class="top-track-view hidden-view">
-        The top track on Rdio right now is <span class="top-track"></span>.
-        <button class="play">Play It</button>
-      </div>
-      <div class="playback-view hidden-view">
-        Now <span class="playback-status"></span>.
-        <button class="toggle-pause">Toggle Pause</button>
-      </div> -->
-    </div>
-    <div id="player"><span id="loading">Loading</span></div>
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>  
-    <script>
-
-      // var topTrack;
-
-      // ----------
-      // function showAuthenticated() {
-      //   $('.authenticated-view').show();
-      //   $('.username').text(R.currentUser.get('firstName') + ' ' + R.currentUser.get('lastName'));
-      // }
-
-      // // ----------
-      // function showUnauthenticated() {
-      //   $('.unauthenticated-view').show();
-      // }
-
-      // // ----------
-      // function showError(message) {
-      //   $('#error-message').text(message);
-      // }
-
-      // // ----------
-      // function showTopTrack() {
-      //   $('.top-track-view').show();
-      //   $('.top-track').text(topTrack.name + ' by ' + topTrack.artist);
-      // }
-
-      // // ----------
-      // function showPlayback() {
-      //   $('.playback-view').show();
-      // }
-
-      // // ----------
-      // function showPlayState(playState) {
-      //   var text = 'unknown';
-      //   switch (playState) {
-      //     case R.player.PLAYSTATE_PAUSED:
-      //       text = 'paused';
-      //       break;
-          
-      //     case R.player.PLAYSTATE_PLAYING:
-      //       text = 'playing';
-      //       break;
-          
-      //     case R.player.PLAYSTATE_STOPPED:
-      //       text = 'stopped';
-      //       break;
-          
-      //     case R.player.PLAYSTATE_BUFFERING:
-      //       text = 'buffering';
-      //       break;
-          
-      //     case R.player.PLAYSTATE_OFFLINE:
-      //       text = 'offline';
-      //       break;
-      //   }
-
-      //   $('.playback-status').text(text);
-      // }
-
-      // // ----------
-      // function getTopTrack() {
-      //   R.request({
-      //     method: 'getTopCharts', 
-      //     content: {
-      //       type: 'Track', 
-      //       start: 0, 
-      //       count: 1
-      //     }, 
-      //     success: function(response) {
-      //       topTrack = response.result[0];
-      //       showTopTrack();
-      //     },
-      //     error: function(response) {
-      //       showError(response.message);
-      //     }
-      //   });
-      // }
-
-      // // ----------
-      // R.ready(function() {
-      //   $('.sign-in').click(function() {
-      //     R.authenticate(function(nowAuthenticated) {
-      //       if (nowAuthenticated) {
-      //         $('.unauthenticated-view').hide();
-      //         showAuthenticated();
-      //       }
-      //     });
-      //   });        
-
-      //   $('.play').click(function() {
-      //     R.player.play({ source: topTrack.key });
-      //     showPlayback();
-      //   });
-
-      //   $('.toggle-pause').click(function() {
-      //     R.player.togglePause();
-      //   });
-
-      //   R.player.on('change:playState', function(newPlayState) { 
-      //     showPlayState(newPlayState);
-      //   });
-
-      //   if (R.authenticated()) {
-      //     showAuthenticated();
-      //   } else {
-      //     showUnauthenticated();
-      //   }
-
-      //   getTopTrack();
-      // });
-
-      // // ----------
-      // if (location.protocol === 'file:') {
-      //   document.getElementById('protocol-error').style.display = 'block';
-      // }
-
-    </script>
+    <div id="content"></div>
   </body>
 </html>

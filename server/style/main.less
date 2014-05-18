@@ -1,0 +1,105 @@
+// Mixins
+.transition(@config) {
+  -webkit-transition: @config;  /* Safari 3.2+, Chrome */
+  -moz-transition: @config;  /* Firefox 4-15 */
+  -o-transition: @config;  /* Opera 10.5–12.00 */
+  transition: @config;  /* Firefox 16+, Opera 12.50+ */
+}
+
+.border-radius(@radius: 10px) {
+  -webkit-border-radius: @radius; /* Saf3-4, iOS 1-3.2, Android ≤1.6 */
+          border-radius: @radius  ; /* Opera 10.5, IE9, Saf5, Chrome, FF4+, iOS 4, Android 2.1+ */
+
+  /* useful if you don't want a bg color from leaking outside the border: */
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+}
+
+// General
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+p {
+  margin-top: 0;
+}
+
+// Views
+#content {
+  margin: 0 auto;
+  height: 100%;
+}
+
+#unauthenticated {
+  padding: 30px;
+  width: 600px;
+  margin: 0 auto;
+}
+
+#pictures {
+  height: 100%;
+  
+  .picture {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    .transition(opacity 2s); // If you change this, also change fadeSpeed in pictures-view.js
+  }
+  
+  .info {
+    position: absolute;
+    left: 30px;
+    bottom: 30px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 30px;
+    z-index: 100;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    
+    .artist {
+      font-weight: bold;
+    }
+    
+    .track {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  .btn {
+    .border-radius(5px);
+    width: 40px;
+    height: 40px;
+    border: 1px solid #333;
+    cursor: pointer;
+    background: no-repeat center center #aaa;
+    z-index: 100;
+
+    &.selected {
+      background-color: #eee;
+      cursor: default;
+    }
+
+    &.disabled {
+      background-color: #666;
+      cursor: default;
+    }
+  }
+
+  .yes {
+    position: absolute;
+    right: 30px;
+    bottom: 80px;
+    background-image: url(../img/yes.png); 
+  }
+
+  .no {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    background-image: url(../img/no.png); 
+  }
+}
