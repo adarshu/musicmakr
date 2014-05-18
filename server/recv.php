@@ -40,7 +40,7 @@ $info = $pubnub->publish(array(
     'channel' => 'hello_world', ## REQUIRED Channel to Send
     'message' => '{"cmd":"play"}'   ## REQUIRED Message String/Array
 ));
-print_r($info);
+//print_r($info);
 
 
 // now greet the sender
