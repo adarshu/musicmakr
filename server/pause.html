@@ -19,7 +19,7 @@
 
           pubnub.subscribe({
              channel : "hello_world",
-             message : function(m){ alert(m) },
+             message : function(m){ console_log(m) },
              connect : publish
          })
      })();
