@@ -10,7 +10,10 @@
     <link rel="stylesheet/less" type="text/css" href="style/main.less" />
 
     <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
+    <!-- PRODUCTION -->
     <script src="https://www.rdio.com/api/api.js?client_id=w4PJ2lyFcEVOEMQG7XtWLQ"></script>
+    <!-- DEBUG -->
+    <!-- <script src="https://www.rdio.com/api/api.js?client_id=qu2nUg8KkGM4AiXxuePmgw"></script> -->
 
     <script src="lib/jquery-1.9.1.min.js"></script>
     <script src="lib/underscore-1.4.4.min.js"></script>
@@ -31,10 +34,12 @@
     <script id="pictures-template" type="text/template">
       <div class="picture"></div>
       <div class="picture"></div>
+      <div class="title">Pa<span>Rdio<span></div>
       <div class="info">
         <div class="artist"></div>
         <div class="track"></div>
         <div class="album"></div>
+        <div class="request">Text requests to 510-344-5686 (e.g. "pharrell happy")</div>
       </div>
       <div class="yes btn"></div>
       <div class="no btn" title="Skip to next source"></div>
@@ -103,10 +108,19 @@
 
          } 
 
+		 // PRODUCTION
          var pubnub = PUBNUB.init({
              publish_key   : 'pub-c-f1c6575f-d2d3-4cd1-bb38-2492c50b7d0e',
              subscribe_key : 'sub-c-e877ab56-de0c-11e3-8c07-02ee2ddab7fe'
          })
+
+		 // DEBUG
+		 /*
+		 var pubnub = PUBNUB.init({
+             publish_key   : 'pub-c-5a007d75-3a95-49a9-a234-b487f9262388',
+             subscribe_key : 'sub-c-188dc65a-de61-11e3-97df-02ee2ddab7fe'
+         })
+         */
 
          pubnub.subscribe({
              channel : "hello_world",
