@@ -3,6 +3,10 @@
 
     <string name="app_name">MusicMakr</string>
     <string name="publish">Publish</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
     <string name="action_settings">Settings</string>
 
 </resources>

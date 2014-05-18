@@ -10,26 +10,23 @@ import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubError;
 import com.pubnub.api.PubnubException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by rayho on 5/17/14.
  */
 public class Messenger {
+    private static final String TAG = Messenger.class.getName();
+    private static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-e877ab56-de0c-11e3-8c07-02ee2ddab7fe";
+    private static final String PUBNUB_PUBLISH_KEY = "pub-c-f1c6575f-d2d3-4cd1-bb38-2492c50b7d0e";
+    private static final String PUBNUB_SECRET = "sec-c-YzFiZTI4OWUtZjFmMS00Y2IzLTg1ZTYtYWYwMDEwZDllNWRh";
+    private static final String PUBNUB_CHANNEL = "hello_world";
+    private static final String JSON_CMD = "cmd";
     private static Messenger instance;
 
-    public static Messenger getInstance() {
-        if (instance == null) {
-            instance = new Messenger();
-        }
-        return instance;
-    }
-
-    private static final String TAG = Messenger.class.getName();
-    private static final String CHANNEL = "hello_world";
-
     private Pubnub pubnub;
-
     private MessageHandler messageHandler;
-
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -94,34 +91,105 @@ public class Messenger {
         }
     };
 
-    public void start() {
+    public static Messenger getInstance() {
+        if (instance == null) {
+            instance = new Messenger();
+        }
+        return instance;
+    }
+
+    /**
+     * Call this to start sending/receiving messages
+     */
+    public void init() {
         if (pubnub != null) {
-            Log.e(TAG, "start() was already called");
+            Log.e(TAG, "init() was already called");
             return;
         }
-        pubnub = new Pubnub(Settings.PUBNUB_PUBLISH_KEY, Settings.PUBNUB_SUBSCRIBE_KEY);
+        pubnub = new Pubnub(PUBNUB_PUBLISH_KEY, PUBNUB_SUBSCRIBE_KEY);
         try {
-            pubnub.subscribe(CHANNEL, subscribeCallback);
+            pubnub.subscribe(PUBNUB_CHANNEL, subscribeCallback);
         } catch (PubnubException e) {
             Log.e(TAG, "Subscribe error", e);
         }
     }
 
-    public void stop() {
+    /**
+     * Call this to stop sending/receiving messages
+     */
+    public void finish() {
         if (pubnub == null) {
-            Log.e(TAG, "start() was not called");
+            Log.e(TAG, "init() was not called");
             return;
         }
         pubnub.unsubscribeAll();
         pubnub = null;
     }
 
+    public void play() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(JSON_CMD, "play");
+            send(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to create JSON", e);
+        }
+    }
+
+    public void pause() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(JSON_CMD, "pause");
+            send(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to create JSON", e);
+        }
+    }
+
+    public void next() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(JSON_CMD, "next");
+            send(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to create JSON", e);
+        }
+    }
+
+    public void prev() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(JSON_CMD, "prev");
+            send(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to create JSON", e);
+        }
+    }
+
+    /**
+     * Send plaintext.
+     * @param message
+     *      The plaintext message
+     */
     public void send(String message) {
         if (pubnub == null) {
-            Log.e(TAG, "start() was not called");
+            Log.e(TAG, "init() was not called");
             return;
         }
-        pubnub.publish(CHANNEL, message, publishCallback);
+        pubnub.publish(PUBNUB_CHANNEL, message, publishCallback);
+    }
+
+    /**
+     * Send JSON.
+     * @param json
+     *      The JSON message
+     */
+    public void send(JSONObject json) {
+        if (pubnub == null) {
+            Log.e(TAG, "init() was not called");
+            return;
+        }
+        pubnub.publish(PUBNUB_CHANNEL, json, publishCallback);
     }
 
     public void setMessageHandler(MessageHandler messageHandler) {

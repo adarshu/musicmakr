@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,9 +9,32 @@
     tools:context="io.musicmakr.MainActivity">
 
     <Button
+        android:id="@+id/prev_button"
+        android:text="@string/prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:text="@string/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/pause_button"
+        android:text="@string/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:text="@string/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/publish_button"
         android:text="@string/publish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-</RelativeLayout>
+</LinearLayout>
