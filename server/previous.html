@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Now Playing</title>
+    <script src=http://cdn.pubnub.com/pubnub.min.js ></script>
+    <script>(function(){
+     
+         var pubnub = PUBNUB.init({
+             publish_key   : 'pub-c-f1c6575f-d2d3-4cd1-bb38-2492c50b7d0e',
+             subscribe_key : 'sub-c-e877ab56-de0c-11e3-8c07-02ee2ddab7fe'
+         })
+     
+         function publish() {
+             pubnub.publish({
+                 channel : "hello_world",
+                 message : {"cmd":"prev"}
+             })
+         }
+
+          pubnub.subscribe({
+             channel : "hello_world",
+             message : function(m){ alert(m) },
+             connect : publish
+         })
+     })();
+
+    </script>
+  </head>
+  <body>
+    <div id="content">PAUSE</div>
+  </body>
+</html>
