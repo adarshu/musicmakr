@@ -23,6 +23,7 @@ public class Messenger {
     private static final String PUBNUB_SECRET = "sec-c-YzFiZTI4OWUtZjFmMS00Y2IzLTg1ZTYtYWYwMDEwZDllNWRh";
     private static final String PUBNUB_CHANNEL = "hello_world";
     private static final String JSON_CMD = "cmd";
+    private static final String JSON_VAL = "val";
     private static Messenger instance;
 
     private Pubnub pubnub;
@@ -160,6 +161,17 @@ public class Messenger {
         try {
             JSONObject json = new JSONObject();
             json.put(JSON_CMD, "prev");
+            send(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to create JSON", e);
+        }
+    }
+
+    public void search(String query) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(JSON_CMD, "search");
+            json.put(JSON_VAL, query);
             send(json);
         } catch (JSONException e) {
             Log.e(TAG, "Unable to create JSON", e);

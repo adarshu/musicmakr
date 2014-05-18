@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 
@@ -16,7 +17,8 @@ public class MainActivity extends Activity implements Messenger.MessageHandler {
     private Button pauseButton;
     private Button prevButton;
     private Button nextButton;
-    private Button publishButton;
+    private Button searchButton;
+    private EditText searchText;
 
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -34,8 +36,11 @@ public class MainActivity extends Activity implements Messenger.MessageHandler {
                 case R.id.next_button:
                     Messenger.getInstance().next();
                     break;
-                case R.id.publish_button:
-                    Messenger.getInstance().send("HELLO WORLD.");
+                case R.id.search_button:
+                    String text = searchText.getText().toString();
+                    if (text != null && text.length() > 0) {
+                        Messenger.getInstance().search(text);
+                    }
                     break;
             }
         }
@@ -53,8 +58,9 @@ public class MainActivity extends Activity implements Messenger.MessageHandler {
         prevButton.setOnClickListener(clickListener);
         nextButton = (Button) findViewById(R.id.next_button);
         nextButton.setOnClickListener(clickListener);
-        publishButton = (Button) findViewById(R.id.publish_button);
-        publishButton.setOnClickListener(clickListener);
+        searchButton = (Button) findViewById(R.id.search_button);
+        searchButton.setOnClickListener(clickListener);
+        searchText = (EditText) findViewById(R.id.search_text);
     }
 
     @Override

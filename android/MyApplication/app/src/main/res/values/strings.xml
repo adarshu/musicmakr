@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">MusicMakr</string>
-    <string name="publish">Publish</string>
+    <string name="search">Search</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="prev">Prev</string>

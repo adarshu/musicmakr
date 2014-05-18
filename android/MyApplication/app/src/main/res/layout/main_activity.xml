@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,24 +17,37 @@
     <Button
         android:id="@+id/play_button"
         android:text="@string/play"
+        android:layout_toRightOf="@id/prev_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/pause_button"
         android:text="@string/pause"
+        android:layout_toRightOf="@id/play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/next_button"
         android:text="@string/next"
+        android:layout_toRightOf="@id/pause_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/publish_button"
-        android:text="@string/publish"
+        android:id="@+id/search_button"
+        android:text="@string/search"
+        android:layout_below="@id/prev_button"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</LinearLayout>
+
+    <EditText
+        android:id="@+id/search_text"
+        android:layout_below="@id/prev_button"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/search_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
